@@ -3,56 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unclickable Button</title>
+    <title>Valentine's Love Letter</title>
     <style>
         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            height: 100vh;
+            background-color: #ffebee;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
         }
 
         .container {
-            position: relative;
-            width: 100%;
-            height: 100%;
+            perspective: 1000px;
         }
 
-        button {
-            position: absolute;
-            padding: 10px 20px;
-            font-size: 18px;
+        .card {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
             cursor: pointer;
-            background-color: #ff5733;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card .front, .card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card .front {
+            background-color: #ff5252;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             color: white;
-            border: none;
-            border-radius: 5px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card .front img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .card .back {
+            background-color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card .back h2 {
+            color: #d32f2f;
+        }
+
+        .card .back p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Floating <3 outlines */
+        .hearts-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart-text {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(255, 105, 180, 0.5); /* Semi-transparent pink */
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            animation: floatUp 8s infinite linear;
+        }
+
+        /* Floating animation */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
 
+    <div class="hearts-container" id="heartsContainer"></div> <!-- Floating <3 -->
+
     <div class="container">
-        <button id="trickyButton">Press me:)</button>
+        <div class="card" id="valentineCard">
+            <!-- Front of the card -->
+            <div class="front">
+                <div>
+                    <img src="https://static.vecteezy.com/system/resources/previews/036/008/877/non_2x/valentine-day-card-with-cute-lovely-capybara-vector.jpg" alt="Capybara Love">
+                    <p>Click me?:)</p>
+                </div>
+            </div>
+
+            <!-- Back of the card -->
+            <div class="back">
+                <h2>Patricia Mae Francis Paga</h2>
+                <p>My pookie,</p>
+                <p>You have always been a blessing in my life with your immeasurable beauty and glowing personality and this will be one of many times where we will be celebrating holidays together. Buttttt, I do have an important question I have to ask you:)</p>
+                <p>Will you be my Valentine?❤️</p>
+                <p>-Your Chrissybells</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        const button = document.getElementById("trickyButton");
-
-        button.addEventListener("mouseenter", () => {
-            const maxX = window.innerWidth - button.clientWidth;
-            const maxY = window.innerHeight - button.clientHeight;
-
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-
-            button.style.left = randomX + "px";
-            button.style.top = randomY + "px";
+        document.getElementById("valentineCard").addEventListener("click", function() {
+            this.classList.toggle("flipped");
         });
+
+        // Generate multiple floating "<3" texts
+        function createHearts() {
+            const heartsContainer = document.getElementById("heartsContainer");
+            for (let i = 0; i < 50; i++) { // Number of <3
+                let heart = document.createElement("div");
+                heart.classList.add("heart-text");
+                heart.innerText = "<3";
+
+                // Random positioning and size
+                let randomLeft = Math.random() * 100;
+                let randomSize = Math.random() * 25 + 25; // Random font size between 20px - 40px
+                let randomDelay = Math.random() * 5; // Random animation delay
+
+                heart.style.left = `${randomLeft}%`;
+                heart.style.fontSize = `${randomSize}px`;
+                heart.style.animationDelay = `${randomDelay}s`;
+
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        createHearts(); // Call function on page load
     </script>
 
 </body>
